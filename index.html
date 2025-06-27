@@ -1,354 +1,366 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="https://i.pinimg.com/736x/a1/0e/c0/a10ec0f2c5e9b4438bb659337af0d660.jpg" type="image/png">
-
-  <title>TesisGO AI | Asistente Inteligente para Tesis</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TesisGO AI | Asistente Inteligente para Tesis</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
-<body class="light-mode">
-  <!-- Loading Screen -->
-  <div id="loading-screen">
-    <div class="loading-container">
-      <div class="ai-spinner">
-        <div class="spinner-ring"></div>
-        <div class="spinner-ring"></div>
-        <div class="spinner-ring"></div>
-      </div>
-      <h3>Inicializando TesisGO AI...</h3>
-      <div class="loading-progress">
-        <div class="progress-bar"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="app-container">
-    <!-- Header -->
-    <header class="glass-header">
-      <div class="header-content">
-        <div class="logo-section">
-          <i class="fas fa-brain ai-icon"></i>
-          <div>
-            <h1>TesisGO <span class="ai-badge">AI</span></h1>
-            <p>Asistente Inteligente para Investigación Académica</p>
-          </div>
-        </div>
-        <div class="header-controls">
-          <button id="theme-toggle" class="control-btn">
-            <i class="fas fa-moon"></i>
-          </button>
-          <button id="ai-assistant" class="control-btn ai-btn">
-            <i class="fas fa-robot"></i>
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <!-- AI Assistant Panel -->
-    <div id="ai-panel" class="ai-assistant-panel">
-      <div class="ai-header">
-        <i class="fas fa-robot"></i>
-        <h3>Asistente IA</h3>
-        <button id="close-ai" class="close-btn">&times;</button>
-      </div>
-      <div class="ai-suggestions" id="ai-suggestions">
-        <div class="suggestion-item">
-          <i class="fas fa-lightbulb"></i>
-          <span>Esperando tu contenido para generar sugerencias...</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Progress Indicator -->
-    <div class="progress-indicator">
-      <div class="progress-step active" data-step="1">
-        <div class="step-circle">1</div>
-        <span>Problema</span>
-      </div>
-      <div class="progress-step" data-step="2">
-        <div class="step-circle">2</div>
-        <span>Objetivos</span>
-      </div>
-      <div class="progress-step" data-step="3">
-        <div class="step-circle">3</div>
-        <span>Metodología</span>
-      </div>
-      <div class="progress-step" data-step="4">
-        <div class="step-circle">4</div>
-        <span>Referencias</span>
-      </div>
-      <div class="progress-step" data-step="5">
-        <div class="step-circle">5</div>
-        <span>Finalizar</span>
-      </div>
-    </div>
-
-    <!-- Navigation Tabs -->
-    <nav class="nav-tabs">
-      <button class="tab-btn active" onclick="mostrarFase('fase1', 1)">
-        <i class="fas fa-question-circle"></i>
-        <span>Problema</span>
-      </button>
-      <button class="tab-btn" onclick="mostrarFase('fase2', 2)">
-        <i class="fas fa-bullseye"></i>
-        <span>Objetivos</span>
-      </button>
-      <button class="tab-btn" onclick="mostrarFase('fase3', 3)">
-        <i class="fas fa-microscope"></i>
-        <span>Metodología</span>
-      </button>
-      <button class="tab-btn" onclick="mostrarFase('fase4', 4)">
-        <i class="fas fa-book"></i>
-        <span>Referencias</span>
-      </button>
-      <button class="tab-btn" onclick="mostrarFase('fase5', 5)">
-        <i class="fas fa-check-circle"></i>
-        <span>Finalizar</span>
-      </button>
-    </nav>
-
-    <main class="main-content">
-      <!-- FASE 1: Problema -->
-      <section id="fase1" class="fase active">
-        <div class="fase-header">
-          <h2><i class="fas fa-question-circle"></i> Planteamiento del Problema</h2>
-          <p>Define claramente el problema de investigación con ayuda de nuestra IA</p>
-        </div>
-
-        <div class="form-group">
-          <label for="tema">
-            <i class="fas fa-tag"></i>
-            Tema de Investigación
-          </label>
-          <input type="text" id="tema" placeholder="Ej. Inteligencia Artificial en Educación Superior" />
-          <div class="ai-hint" id="tema-hint"></div>
-        </div>
-
-        <div class="form-group">
-          <label for="problema">
-            <i class="fas fa-exclamation-triangle"></i>
-            Descripción del Problema
-          </label>
-          <textarea id="problema" placeholder="Describe el problema principal de tu investigación..."></textarea>
-          <div class="char-counter"><span id="problema-count">0</span>/500 caracteres</div>
-        </div>
-
-        <div class="form-group">
-          <label for="justificacion">
-            <i class="fas fa-balance-scale"></i>
-            Justificación
-          </label>
-          <textarea id="justificacion" placeholder="¿Por qué es importante esta investigación?"></textarea>
-          <div class="char-counter"><span id="justificacion-count">0</span>/400 caracteres</div>
-        </div>
-
-        <button class="ai-generate-btn" onclick="generarSugerenciaProblema()">
-          <i class="fas fa-magic"></i>
-          Generar Sugerencias IA
-        </button>
-      </section>
-
-      <!-- FASE 2: Objetivos -->
-      <section id="fase2" class="fase">
-        <div class="fase-header">
-          <h2><i class="fas fa-bullseye"></i> Objetivos e Hipótesis</h2>
-          <p>Establece objetivos claros y formula tu hipótesis</p>
-        </div>
-
-        <div class="form-group">
-          <label for="objetivo-general">
-            <i class="fas fa-target"></i>
-            Objetivo General
-          </label>
-          <textarea id="objetivo-general" placeholder="Redacta el objetivo principal de tu investigación..."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="objetivos-especificos">
-            <i class="fas fa-list-ul"></i>
-            Objetivos Específicos
-          </label>
-          <textarea id="objetivos-especificos" placeholder="Lista los objetivos específicos..."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="hipotesis">
-            <i class="fas fa-flask"></i>
-            Hipótesis
-          </label>
-          <textarea id="hipotesis" placeholder="Formula tu hipótesis de investigación..."></textarea>
-        </div>
-
-        <button class="ai-generate-btn" onclick="generarSugerenciaObjetivos()">
-          <i class="fas fa-magic"></i>
-          Optimizar con IA
-        </button>
-      </section>
-
-      <!-- FASE 3: Metodología -->
-      <section id="fase3" class="fase">
-        <div class="fase-header">
-          <h2><i class="fas fa-microscope"></i> Metodología de Investigación</h2>
-          <p>Define tu enfoque metodológico</p>
-        </div>
-
-        <div class="methodology-grid">
-          <div class="method-card" onclick="selectMethod('cuantitativo')">
-            <i class="fas fa-chart-bar"></i>
-            <h4>Cuantitativo</h4>
-            <p>Análisis numérico y estadístico</p>
-          </div>
-          <div class="method-card" onclick="selectMethod('cualitativo')">
-            <i class="fas fa-comments"></i>
-            <h4>Cualitativo</h4>
-            <p>Análisis descriptivo y exploratorio</p>
-          </div>
-          <div class="method-card" onclick="selectMethod('mixto')">
-            <i class="fas fa-balance-scale"></i>
-            <h4>Mixto</h4>
-            <p>Combinación de ambos enfoques</p>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="metodologia">
-            <i class="fas fa-cogs"></i>
-            Descripción Metodológica
-          </label>
-          <textarea id="metodologia" placeholder="Describe tu metodología de investigación..."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="poblacion">
-            <i class="fas fa-users"></i>
-            Población y Muestra
-          </label>
-          <textarea id="poblacion" placeholder="Define tu población objetivo y muestra..."></textarea>
-        </div>
-      </section>
-
-      <!-- FASE 4: Referencias -->
-      <section id="fase4" class="fase">
-        <div class="fase-header">
-          <h2><i class="fas fa-book"></i> Referencias Bibliográficas</h2>
-          <p>Gestiona tus fuentes académicas</p>
-        </div>
-
-        <div class="citation-tools">
-          <button class="citation-btn" onclick="setCitationStyle('apa')">
-            <i class="fas fa-graduation-cap"></i>
-            APA
-          </button>
-          <button class="citation-btn" onclick="setCitationStyle('mla')">
-            <i class="fas fa-book-open"></i>
-            MLA
-          </button>
-          <button class="citation-btn" onclick="setCitationStyle('chicago')">
-            <i class="fas fa-university"></i>
-            Chicago
-          </button>
-        </div>
-
-        <div class="form-group">
-          <label for="citas">
-            <i class="fas fa-quote-right"></i>
-            Referencias Bibliográficas
-          </label>
-          <textarea id="citas" placeholder="Agrega tus referencias en formato académico..."></textarea>
-        </div>
-
-        <div class="file-upload-area">
-          <div class="upload-zone" onclick="document.getElementById('archivoTesis').click()">
-            <i class="fas fa-cloud-upload-alt"></i>
-            <h4>Subir Documento</h4>
-            <p>Arrastra tu archivo o haz clic para seleccionar</p>
-            <input type="file" id="archivoTesis" accept=".pdf,.doc,.docx" />
-          </div>
-          <div id="file-info" class="file-info"></div>
-        </div>
-      </section>
-
-      <!-- FASE 5: Finalizar -->
-      <section id="fase5" class="fase">
-        <div class="fase-header">
-          <h2><i class="fas fa-check-circle"></i> Revisión y Exportación</h2>
-          <p>Revisa tu trabajo y genera el documento final</p>
-        </div>
-
-        <div class="summary-container">
-          <div class="summary-stats">
-            <div class="stat-card">
-              <i class="fas fa-file-alt"></i>
-              <div>
-                <h4 id="word-count">0</h4>
-                <span>Palabras</span>
-              </div>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-spinner">
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
             </div>
-            <div class="stat-card">
-              <i class="fas fa-clock"></i>
-              <div>
-                <h4 id="completion-time">0%</h4>
-                <span>Completado</span>
-              </div>
+            <h2 class="loading-title">TesisGO AI</h2>
+            <p class="loading-subtitle">Inicializando asistente inteligente...</p>
+            <div class="loading-progress">
+                <div class="progress-fill"></div>
             </div>
-            <div class="stat-card">
-              <i class="fas fa-star"></i>
-              <div>
-                <h4 id="quality-score">0</h4>
-                <span>Calidad IA</span>
-              </div>
-            </div>
-          </div>
-
-          <div id="resumen-datos" class="summary-content"></div>
         </div>
-
-        <div class="export-options">
-          <button class="export-btn primary" onclick="exportarPDF()">
-            <i class="fas fa-file-pdf"></i>
-            Exportar PDF Premium
-          </button>
-          <button class="export-btn secondary" onclick="exportarWord()">
-            <i class="fas fa-file-word"></i>
-            Exportar Word
-          </button>
-          <button class="export-btn tertiary" onclick="compartirProyecto()">
-            <i class="fas fa-share-alt"></i>
-            Compartir Proyecto
-          </button>
-        </div>
-      </section>
-    </main>
-
-    <!-- Navigation Controls -->
-    <div class="navigation-controls">
-      <button id="prev-btn" class="nav-control-btn" onclick="navegarFase(-1)">
-        <i class="fas fa-chevron-left"></i>
-        Anterior
-      </button>
-      <button id="next-btn" class="nav-control-btn primary" onclick="navegarFase(1)">
-        Siguiente
-        <i class="fas fa-chevron-right"></i>
-      </button>
     </div>
 
-    <footer class="glass-footer">
-      <div class="footer-content">
-        <p>&copy; 2025 TesisGO AI - Powered by Artificial Intelligence</p>
-        <div class="footer-links">
-          <a href="#"><i class="fas fa-question-circle"></i> Ayuda</a>
-          <a href="#"><i class="fas fa-cog"></i> Configuración</a>
-          <a href="#"><i class="fas fa-info-circle"></i> Acerca de</a>
-        </div>
-      </div>
-    </footer>
-  </div>
+    <!-- Main App -->
+    <div id="main-app" class="main-app hidden">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>TesisGO <span class="ai-badge">AI</span></h1>
+                        <p>Asistente Inteligente</p>
+                    </div>
+                </div>
+                
+                <div class="header-controls">
+                    <button id="theme-toggle" class="control-btn" title="Cambiar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button id="ai-assistant" class="control-btn ai-btn" title="Asistente IA">
+                        <i class="fas fa-robot"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
 
-  <script src="script.js"></script>
+        <!-- Progress Indicator -->
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <span class="step-label">Problema</span>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <span class="step-label">Objetivos</span>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <span class="step-label">Metodología</span>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-circle">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <span class="step-label">Referencias</span>
+                </div>
+                <div class="step" data-step="5">
+                    <div class="step-circle">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <span class="step-label">Finalizar</span>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 20%"></div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Phase 1: Problema -->
+            <section id="phase-1" class="phase active">
+                <div class="phase-header">
+                    <h2><i class="fas fa-lightbulb"></i> Planteamiento del Problema</h2>
+                    <p>Define claramente el problema de investigación con ayuda de nuestra IA</p>
+                </div>
+
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="tema">
+                            <i class="fas fa-tag"></i>
+                            Tema de Investigación
+                        </label>
+                        <input type="text" id="tema" placeholder="Ej. Inteligencia Artificial en Educación Superior">
+                        <div class="ai-hint" id="tema-hint"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="problema">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Descripción del Problema
+                        </label>
+                        <textarea id="problema" placeholder="Describe el problema principal de tu investigación..." rows="4"></textarea>
+                        <div class="char-counter">
+                            <span id="problema-count">0</span>/500 caracteres
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="justificacion">
+                            <i class="fas fa-balance-scale"></i>
+                            Justificación
+                        </label>
+                        <textarea id="justificacion" placeholder="¿Por qué es importante esta investigación?" rows="3"></textarea>
+                        <div class="char-counter">
+                            <span id="justificacion-count">0</span>/400 caracteres
+                        </div>
+                    </div>
+
+                    <button class="ai-generate-btn" onclick="generateAISuggestions()">
+                        <i class="fas fa-magic"></i>
+                        Generar Sugerencias IA
+                    </button>
+                </div>
+            </section>
+
+            <!-- Phase 2: Objetivos -->
+            <section id="phase-2" class="phase">
+                <div class="phase-header">
+                    <h2><i class="fas fa-bullseye"></i> Objetivos e Hipótesis</h2>
+                    <p>Establece objetivos claros y formula tu hipótesis</p>
+                </div>
+
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="objetivo-general">
+                            <i class="fas fa-target"></i>
+                            Objetivo General
+                        </label>
+                        <textarea id="objetivo-general" placeholder="Redacta el objetivo principal de tu investigación..." rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="objetivos-especificos">
+                            <i class="fas fa-list-ul"></i>
+                            Objetivos Específicos
+                        </label>
+                        <textarea id="objetivos-especificos" placeholder="Lista los objetivos específicos..." rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hipotesis">
+                            <i class="fas fa-flask"></i>
+                            Hipótesis
+                        </label>
+                        <textarea id="hipotesis" placeholder="Formula tu hipótesis de investigación..." rows="3"></textarea>
+                    </div>
+
+                    <button class="ai-generate-btn" onclick="generateAISuggestions()">
+                        <i class="fas fa-magic"></i>
+                        Optimizar con IA
+                    </button>
+                </div>
+            </section>
+
+            <!-- Phase 3: Metodología -->
+            <section id="phase-3" class="phase">
+                <div class="phase-header">
+                    <h2><i class="fas fa-microscope"></i> Metodología de Investigación</h2>
+                    <p>Define tu enfoque metodológico</p>
+                </div>
+
+                <div class="form-container">
+                    <div class="methodology-grid">
+                        <div class="method-card" onclick="selectMethod('cuantitativo')">
+                            <i class="fas fa-chart-bar"></i>
+                            <h4>Cuantitativo</h4>
+                            <p>Análisis numérico y estadístico</p>
+                        </div>
+                        <div class="method-card" onclick="selectMethod('cualitativo')">
+                            <i class="fas fa-comments"></i>
+                            <h4>Cualitativo</h4>
+                            <p>Análisis descriptivo y exploratorio</p>
+                        </div>
+                        <div class="method-card" onclick="selectMethod('mixto')">
+                            <i class="fas fa-balance-scale"></i>
+                            <h4>Mixto</h4>
+                            <p>Combinación de ambos enfoques</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="metodologia">
+                            <i class="fas fa-cogs"></i>
+                            Descripción Metodológica
+                        </label>
+                        <textarea id="metodologia" placeholder="Describe tu metodología de investigación..." rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="poblacion">
+                            <i class="fas fa-users"></i>
+                            Población y Muestra
+                        </label>
+                        <textarea id="poblacion" placeholder="Define tu población objetivo y muestra..." rows="3"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Phase 4: Referencias -->
+            <section id="phase-4" class="phase">
+                <div class="phase-header">
+                    <h2><i class="fas fa-book"></i> Referencias Bibliográficas</h2>
+                    <p>Gestiona tus fuentes académicas</p>
+                </div>
+
+                <div class="form-container">
+                    <div class="citation-tools">
+                        <button class="citation-btn active" onclick="setCitationStyle('apa')">
+                            <i class="fas fa-graduation-cap"></i>
+                            APA
+                        </button>
+                        <button class="citation-btn" onclick="setCitationStyle('mla')">
+                            <i class="fas fa-book-open"></i>
+                            MLA
+                        </button>
+                        <button class="citation-btn" onclick="setCitationStyle('chicago')">
+                            <i class="fas fa-university"></i>
+                            Chicago
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="citas">
+                            <i class="fas fa-quote-right"></i>
+                            Referencias Bibliográficas
+                        </label>
+                        <textarea id="citas" placeholder="Agrega tus referencias en formato académico..." rows="6"></textarea>
+                    </div>
+
+                    <div class="file-upload-area">
+                        <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h4>Subir Documento</h4>
+                            <p>Arrastra tu archivo o haz clic para seleccionar</p>
+                            <input type="file" id="file-input" accept=".pdf,.doc,.docx" style="display: none;">
+                        </div>
+                        <div id="file-info" class="file-info hidden"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Phase 5: Finalizar -->
+            <section id="phase-5" class="phase">
+                <div class="phase-header">
+                    <h2><i class="fas fa-check-circle"></i> Revisión y Exportación</h2>
+                    <p>Revisa tu trabajo y genera el documento final</p>
+                </div>
+
+                <div class="form-container">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-file-alt"></i>
+                            <div class="stat-info">
+                                <h4 id="word-count">0</h4>
+                                <span>Palabras</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-clock"></i>
+                            <div class="stat-info">
+                                <h4 id="completion-percentage">0%</h4>
+                                <span>Completado</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-star"></i>
+                            <div class="stat-info">
+                                <h4 id="quality-score">0</h4>
+                                <span>Calidad IA</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="summary-container">
+                        <h3>Resumen del Proyecto</h3>
+                        <div id="project-summary" class="summary-content">
+                            <!-- Summary will be generated here -->
+                        </div>
+                    </div>
+
+                    <div class="export-buttons">
+                        <button class="export-btn primary" onclick="exportPDF()">
+                            <i class="fas fa-file-pdf"></i>
+                            Exportar PDF
+                        </button>
+                        <button class="export-btn secondary" onclick="exportWord()">
+                            <i class="fas fa-file-word"></i>
+                            Exportar Word
+                        </button>
+                        <button class="export-btn tertiary" onclick="shareProject()">
+                            <i class="fas fa-share-alt"></i>
+                            Compartir
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Navigation Controls -->
+        <div class="navigation-controls">
+            <button id="prev-btn" class="nav-btn" onclick="navigatePhase(-1)" disabled>
+                <i class="fas fa-chevron-left"></i>
+                Anterior
+            </button>
+            <button id="next-btn" class="nav-btn primary" onclick="navigatePhase(1)">
+                Siguiente
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- AI Assistant Panel -->
+        <div id="ai-panel" class="ai-panel">
+            <div class="ai-header">
+                <div class="ai-title">
+                    <i class="fas fa-robot"></i>
+                    <h3>Asistente IA</h3>
+                </div>
+                <button id="close-ai" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="ai-content">
+                <div id="ai-suggestions" class="ai-suggestions">
+                    <div class="suggestion-item">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Esperando tu contenido para generar sugerencias...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toast-container" class="toast-container"></div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
